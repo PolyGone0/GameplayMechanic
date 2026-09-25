@@ -1,5 +1,7 @@
 using System.Collections;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BeamAttack : MonoBehaviour
 {
@@ -15,44 +17,66 @@ public class BeamAttack : MonoBehaviour
 
     [SerializeField] private GameObject Beam;
 
+    private InputAction attackAction, castAction;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Beam.SetActive(false);
 
         character = GameObject.FindWithTag("Player").transform;
+
+        attackAction = InputSystem.actions.FindAction("Attack");
+        castAction = InputSystem.actions.FindAction("Cast");
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Moves Beam in direction player is facing
         transform.position += MoveDirection() * speed * Time.deltaTime;
 
-        if (Input.GetMouseButtonUp(1) && notCasted)
+        // Checks if RMB is held, if not, destroys gameObject
+        if (notCasted)
         {
-            Destroy(gameObject);
+            heldInput(attackAction.ReadValue<float>());
         }
-        
-        if (Input.GetMouseButtonDown(0))
+
+        // Looks for LMB input, then casts and updates bool
+        if (castAction.ReadValue<float>() == 1)
         {
+            if (notCasted)
+            {
+                MaterializeBeam();
+            }
             notCasted = false;
-            MaterializeBeam();
         }
     }
 
+    private void heldInput(float pInput)
+    {
+        if (pInput == 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Updates characterDirection until Beam is cast
     private Vector3 MoveDirection()
     {
         if (notCasted)
         {
             characterDirection = character.forward;
             return characterDirection;
-        } else
+        }
+        else
         {
             return characterDirection;
         }
 
     }
 
+    // Casts Beam, increasing speed and starts lifetime countdown
     private void MaterializeBeam()
     {
         speed += 10;
@@ -60,6 +84,7 @@ public class BeamAttack : MonoBehaviour
         StartCoroutine(BeamLifetime(lifetime));
     }
 
+    // Starts timer for lifetime duration then destroys Beam
     private IEnumerator BeamLifetime(float duration)
     {
         yield return new WaitForSeconds(duration);

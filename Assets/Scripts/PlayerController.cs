@@ -17,9 +17,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
+    // Calculates players movement then repeats
     public void Move(Vector2 movementVector)
     {
         Vector3 move = transform.forward * movementVector.y + transform.right * movementVector.x;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
         characterController.Move(move);
     }
 
+    // Calculates players look rotation then repeats
     public void Rotate(Vector2 rotationVector)
     {
         rotationY += rotationVector.x * RotationSpeed * Time.deltaTime * 4;

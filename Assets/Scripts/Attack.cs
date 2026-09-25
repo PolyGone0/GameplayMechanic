@@ -17,7 +17,7 @@ public class Attack : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player");
 
-        if (player != null )
+        if (player != null)
         {
             PlayerLocation = player.transform;
         }
@@ -26,13 +26,15 @@ public class Attack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Updaates PlayerLocation
         if (PlayerLocation != null)
         {
             playerPosition = new Vector3(PlayerLocation.position.x, PlayerLocation.position.y - 1.5f, PlayerLocation.position.z);
         }
     }
 
-    public void SummonAttack()
+    // Instantiates Beam object
+    public void SummonAttack(float pInput)
     {
         Quaternion spawnRotation = Quaternion.identity;
         GameObject attackObj = Instantiate(BeamAttack, playerPosition, spawnRotation);
