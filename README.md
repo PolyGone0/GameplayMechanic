@@ -25,6 +25,11 @@ public void Rotate(Vector2 rotationVector)
     transform.localRotation = Quaternion.Euler(0, rotationY, 0);
 }
 
+# Instead of hard coding inputs, I used the built in Input system for Unity:
+moveAction = InputSystem.actions.FindAction("Move");
+lookAction = InputSystem.actions.FindAction("Look");
+attackAction = InputSystem.actions.FindAction("Attack");
+
 # For my scope, I fortunately didn't have to shrink it any. My project is whitebox and very rudimentary, but it still shows the basic mechanic.
 
 # Video is in a folder
