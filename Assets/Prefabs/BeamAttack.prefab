@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5064947944410990534}
   m_Layer: 0
   m_Name: BeamAttack
-  m_TagString: Untagged
+  m_TagString: Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+  notCasted: 0
   Beam: {fileID: 6374160703904340998}
 --- !u!1 &6374160703904340998
 GameObject:
@@ -212,7 +213,7 @@ CapsuleCollider:
   m_Radius: 0.5000001
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.000000059604645, y: -0.2, z: -0.00000008940697}
 --- !u!54 &3680879401448781587
 Rigidbody:
   m_ObjectHideFlags: 0

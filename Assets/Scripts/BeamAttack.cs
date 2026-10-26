@@ -64,7 +64,7 @@ public class BeamAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Target"))
+        if (other.CompareTag("Target"))
         {
             Destroy(other.gameObject);
         }
