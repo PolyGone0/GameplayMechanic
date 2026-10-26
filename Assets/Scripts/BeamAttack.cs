@@ -6,28 +6,21 @@ using UnityEngine.InputSystem;
 public class BeamAttack : MonoBehaviour
 {
     private Transform character;
-
-    public float speed = 20.0f;
-
-    private bool notCasted = true;
-
     private Vector3 characterDirection;
 
+    public float speed = 20.0f;
     private float lifetime = 1.0f;
+    public bool notCasted;
 
     [SerializeField] private GameObject Beam;
-
-    private InputAction attackAction, castAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Beam.SetActive(false);
+        notCasted = true;
 
         character = GameObject.FindWithTag("Player").transform;
-
-        attackAction = InputSystem.actions.FindAction("Attack");
-        castAction = InputSystem.actions.FindAction("Cast");
     }
 
     // Update is called once per frame
@@ -35,30 +28,6 @@ public class BeamAttack : MonoBehaviour
     {
         // Moves Beam in direction player is facing
         transform.position += MoveDirection() * speed * Time.deltaTime;
-
-        // Checks if RMB is held, if not, destroys gameObject
-        if (notCasted)
-        {
-            heldInput(attackAction.ReadValue<float>());
-        }
-
-        // Looks for LMB input, then casts and updates bool
-        if (castAction.ReadValue<float>() == 1)
-        {
-            if (notCasted)
-            {
-                MaterializeBeam();
-            }
-            notCasted = false;
-        }
-    }
-
-    private void heldInput(float pInput)
-    {
-        if (pInput == 0)
-        {
-            Destroy(gameObject);
-        }
     }
 
     // Updates characterDirection until Beam is cast
@@ -77,8 +46,10 @@ public class BeamAttack : MonoBehaviour
     }
 
     // Casts Beam, increasing speed and starts lifetime countdown
-    private void MaterializeBeam()
+    public void MaterializeBeam()
     {
+        notCasted = false;
+
         speed += 10;
         Beam.SetActive(true);
         StartCoroutine(BeamLifetime(lifetime));
@@ -89,5 +60,13 @@ public class BeamAttack : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Target"))
+        {
+            Destroy(other.gameObject);
+        }
     }
 }
